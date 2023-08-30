@@ -34,6 +34,12 @@ export default defineConfig({
       layout: false,
     },
     {
+      name: '注册账号',
+      path: '/register',
+      component: './Register',
+      layout: false,
+    },
+    {
       name: ' CRUD 示例',
       path: '/table',
       component: './Table',
