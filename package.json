@@ -13,9 +13,13 @@
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
     "@ant-design/pro-components": "^2.4.4",
+    "@types/lodash-es": "^4.17.9",
     "@umijs/max": "^4.0.78",
     "@unocss/cli": "^0.55.3",
     "antd": "^5.4.0",
+    "await-to-js": "^3.0.0",
+    "localforage": "^1.10.0",
+    "lodash-es": "^4.17.21",
     "unocss": "^0.55.3"
   },
   "devDependencies": {

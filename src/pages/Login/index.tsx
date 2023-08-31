@@ -1,12 +1,35 @@
 import { LoginForm, ProFormText } from '@ant-design/pro-components';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { Link } from '@umijs/max';
+import { Link, request } from '@umijs/max';
+import to from 'await-to-js';
+import { isNull } from 'lodash-es';
+import { message } from 'antd';
+import localforage from 'localforage';
 
 interface ILoginProps {}
 
 const Login = (props: ILoginProps) => {
+  const handleFinish = async (values: {
+    username: string;
+    password: string;
+  }) => {
+    const [err, res] = await to(
+      request('/user/login', {
+        method: 'post',
+        data: values,
+      }),
+    );
+    if (isNull(err)) {
+      console.log(res);
+      await localforage.setItem('access_token', res.accessToken);
+      await localforage.setItem('refresh_token', res.refreshToken);
+      await localforage.setItem('user_info', res.userInfo);
+    } else {
+      message.error(err?.data);
+    }
+  };
   return (
-    <LoginForm title="会议室预定系统" subTitle="zxp">
+    <LoginForm title="会议室预定系统" subTitle="zxp" onFinish={handleFinish}>
       <ProFormText
         name="username"
         fieldProps={{
