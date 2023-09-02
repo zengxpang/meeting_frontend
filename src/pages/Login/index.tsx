@@ -5,10 +5,13 @@ import to from 'await-to-js';
 import { isNull } from 'lodash-es';
 import { message } from 'antd';
 import localforage from 'localforage';
+import { useNavigate } from '@umijs/max';
 
 interface ILoginProps {}
 
 const Login = (props: ILoginProps) => {
+  const navigate = useNavigate();
+
   const handleFinish = async (values: {
     username: string;
     password: string;
@@ -20,12 +23,13 @@ const Login = (props: ILoginProps) => {
       }),
     );
     if (isNull(err)) {
-      console.log(res);
       await localforage.setItem('access_token', res.accessToken);
       await localforage.setItem('refresh_token', res.refreshToken);
       await localforage.setItem('user_info', res.userInfo);
+      message.success('登录成功');
+      navigate('/');
     } else {
-      message.error(err?.data);
+      message.error(err);
     }
   };
   return (
@@ -40,7 +44,7 @@ const Login = (props: ILoginProps) => {
         rules={[
           {
             required: true,
-            message: '请输入用户名!',
+            message: '请输入用户名',
           },
         ]}
       />
@@ -54,13 +58,13 @@ const Login = (props: ILoginProps) => {
         rules={[
           {
             required: true,
-            message: '请输入密码！',
+            message: '请输入密码',
           },
         ]}
       />
       <div className="flex justify-between mb-8px ">
-        <Link to="/home">忘记密码</Link>
         <Link to="/register">注册账号</Link>
+        <Link to="/updatePassword">忘记密码</Link>
       </div>
     </LoginForm>
   );

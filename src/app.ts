@@ -45,7 +45,7 @@ export const request: RequestConfig = {
         return response?.data;
       },
       (error: any) => {
-        return Promise.reject(error?.response?.data);
+        return Promise.reject(error?.response?.data?.data);
       },
     ],
   ],

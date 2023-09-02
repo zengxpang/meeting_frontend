@@ -1,92 +1,158 @@
+import { IRegisterUser, register, registerCaptcha } from '@/services';
 import {
-  LoginForm,
   ProForm,
   ProFormText,
   ProFormCaptcha,
 } from '@ant-design/pro-components';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { Form, Input, message } from 'antd';
+import { message } from 'antd';
+import to from 'await-to-js';
+import { isNull } from 'lodash-es';
+import { history } from '@umijs/max';
+import { Link } from '@umijs/max';
 
 interface IRegisterProps {}
 
 const Register = (props: IRegisterProps) => {
+  const handleFinish = async (
+    values: IRegisterUser & {
+      confirmPassword: string;
+    },
+  ) => {
+    const { confirmPassword, ...rest } = values;
+    const [err, res] = await to(register(rest));
+    if (!isNull(err)) {
+      message.error(err);
+    } else {
+      message.success(res);
+      history.push('/login');
+    }
+  };
+
+  const handleGetCaptcha = async (email: string) => {
+    const [err, res] = await to(registerCaptcha(email));
+    if (!isNull(err)) {
+      message.error(err);
+    } else {
+      message.success(res);
+    }
+  };
+
   return (
     <div className="flex flex-col h-full justify-center items-center">
       <div className="font-600 font-size-33px mb-4">会议室预定系统</div>
-      <ProForm layout="horizontal">
+      <ProForm
+        layout="vertical"
+        onFinish={handleFinish}
+        submitter={{
+          searchConfig: {
+            submitText: '注册',
+          },
+          resetButtonProps: {
+            style: {
+              display: 'none',
+            },
+          },
+          submitButtonProps: {
+            style: {
+              width: '100%',
+            },
+          },
+        }}
+      >
         <ProFormText
-          fieldProps={{
-            size: 'large',
-          }}
           width="md"
           name="username"
           label="用户名"
           placeholder={'请输入用户名'}
+          rules={[
+            {
+              required: true,
+              message: '请输入用户名',
+            },
+          ]}
         />
         <ProFormText
-          fieldProps={{
-            size: 'large',
-          }}
           width="md"
-          name="nickname"
+          name="nickName"
           label="昵称"
           placeholder={'请输入昵称'}
+          rules={[
+            {
+              required: true,
+              message: '请输入昵称',
+            },
+          ]}
         />
         <ProFormText.Password
-          fieldProps={{
-            size: 'large',
-          }}
           width="md"
           name="password"
           label="密码"
           placeholder={'请输入密码'}
+          rules={[
+            {
+              required: true,
+              message: '请输入密码',
+            },
+          ]}
         />
         <ProFormText.Password
-          fieldProps={{
-            size: 'large',
-          }}
           width="md"
-          name="confirm"
+          name="confirmPassword"
           label="确认密码"
           placeholder={'请再次输入密码'}
+          dependencies={['password']}
+          rules={[
+            {
+              required: true,
+              message: '请再次输入密码',
+            },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('password') === value) {
+                  return Promise.resolve();
+                }
+                console.log(getFieldValue('password') === value);
+                return Promise.reject(new Error('确认密码与密码不匹配!'));
+              },
+            }),
+          ]}
         />
         <ProFormText
-          fieldProps={{
-            size: 'large',
-          }}
           width="md"
           name="email"
           label="邮箱"
           placeholder={'请输入邮箱'}
-          rules={[{ type: 'email', message: '请输入正确的邮箱地址' }]}
+          rules={[
+            { type: 'email', message: '请输入正确的邮箱地址' },
+            {
+              required: true,
+              message: '请输入邮箱',
+            },
+          ]}
         />
         <ProFormCaptcha
-          fieldProps={{
-            size: 'large',
-          }}
-          captchaProps={{
-            size: 'large',
-          }}
           label="验证码"
           placeholder={'请输入验证码'}
           captchaTextRender={(timing, count) => {
-            console.log(timing, count);
             if (timing) {
               return `${count} ${'获取验证码'}`;
             }
             return '获取验证码';
           }}
           name="captcha"
+          phoneName="email"
           rules={[
             {
               required: true,
-              message: '请输入验证码！',
+              message: '请输入验证码',
             },
           ]}
-          onGetCaptcha={async () => {
-            message.success('获取验证码成功！验证码为：1234');
-          }}
+          onGetCaptcha={handleGetCaptcha}
+          countDown={5}
         />
+        <div className="mb-4 text-right">
+          已有账号? 去<Link to="/login">登录</Link>
+        </div>
       </ProForm>
     </div>
   );

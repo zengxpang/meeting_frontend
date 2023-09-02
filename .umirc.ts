@@ -47,9 +47,10 @@ export default defineConfig({
       layout: false,
     },
     {
-      name: ' CRUD 示例',
-      path: '/table',
-      component: './Table',
+      name: '忘记密码',
+      path: '/updatePassword',
+      component: './UpdatePassword',
+      layout: false,
     },
   ],
   npmClient: 'pnpm',
