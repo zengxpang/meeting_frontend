@@ -148,7 +148,6 @@ const Register = (props: IRegisterProps) => {
             },
           ]}
           onGetCaptcha={handleGetCaptcha}
-          countDown={5}
         />
         <div className="mb-4 text-right">
           已有账号? 去<Link to="/login">登录</Link>
