@@ -33,7 +33,15 @@ const Login = (props: ILoginProps) => {
     }
   };
   return (
-    <LoginForm title="会议室预定系统" subTitle="zxp" onFinish={handleFinish}>
+    <LoginForm
+      title="会议室预定系统"
+      subTitle="zxp"
+      onFinish={handleFinish}
+      initialValues={{
+        username: 'lisi',
+        password: '123456',
+      }}
+    >
       <ProFormText
         name="username"
         fieldProps={{
