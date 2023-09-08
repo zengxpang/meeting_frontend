@@ -44,7 +44,7 @@ interface ResponseStructure {
 
 interface PendingTask {
   config: any;
-  resolve: Function;
+  resolve: (value: Error | PromiseLike<Error>) => void;
 }
 let refreshing = false; // 正在刷新token
 const queue: PendingTask[] = []; // 请求队列
@@ -86,9 +86,8 @@ export const request: RequestConfig = {
             });
             return maxRequest(config);
           } else {
-            console.log(res);
             message.error(res.data);
-            // history.push('/login');
+            history.push('/login');
           }
         }
         return Promise.reject(error?.response?.data?.data);
