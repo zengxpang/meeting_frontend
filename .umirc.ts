@@ -27,12 +27,7 @@ export default defineConfig({
   routes: [
     {
       path: '/',
-      redirect: '/home',
-    },
-    {
-      name: '首页',
-      path: '/home',
-      component: './Home',
+      redirect: '/meetingRoomList',
     },
     {
       name: '登录',
@@ -57,6 +52,16 @@ export default defineConfig({
       path: '/updateInfo',
       component: './UpdateInfo',
       hideInMenu: true,
+    },
+    {
+      name: '会议室列表',
+      path: '/meetingRoomList',
+      component: './MeetingRoomList',
+    },
+    {
+      name: '预定历史',
+      path: '/bookedHistory',
+      component: './BookedHistory',
     },
   ],
   npmClient: 'pnpm',
