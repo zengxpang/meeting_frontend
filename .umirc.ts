@@ -5,21 +5,14 @@ export default defineConfig({
   access: {},
   model: {},
   initialState: {},
-  request: {
-    // useRequest 就可以直接消费 data
-    dataField: 'data',
-  },
+  styledComponents: {},
+  request: {},
   layout: {
-    title: '会议室预定管理系统',
-  },
-  plugins: [require.resolve('@umijs/plugins/dist/unocss')],
-  unocss: {
-    // 检测 className 的文件范围，若项目不包含 src 目录，可使用 `pages/**/*.tsx`
-    watch: ['src/**/*.tsx', 'src/**/*.jsx'],
+    title: '会议室预定用户系统',
   },
   proxy: {
     '/api': {
-      target: 'http://localhost:3000/',
+      target: 'http://localhost:30086/',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
@@ -57,11 +50,13 @@ export default defineConfig({
       name: '会议室列表',
       path: '/meetingRoomList',
       component: './MeetingRoomList',
+      icon: 'UnorderedListOutlined',
     },
     {
       name: '预定历史',
       path: '/bookedHistory',
       component: './BookedHistory',
+      icon: 'HistoryOutlined',
     },
   ],
   npmClient: 'pnpm',

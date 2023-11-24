@@ -5,14 +5,12 @@
 import {
   RequestConfig,
   RunTimeLayoutConfig,
-  request as maxRequest,
   history,
+  createGlobalStyle,
 } from '@umijs/max';
 import localforage from 'localforage';
 import { Setting } from '@/components';
-import to from 'await-to-js';
 import { message } from 'antd';
-import { refreshToken } from '@/services';
 
 export async function getInitialState(): Promise<{ name: string }> {
   return { name: 'zxp' };
@@ -42,13 +40,6 @@ interface ResponseStructure {
   success: boolean;
 }
 
-interface PendingTask {
-  config: any;
-  resolve: (value: Error | PromiseLike<Error>) => void;
-}
-let refreshing = false; // 正在刷新token
-const queue: PendingTask[] = []; // 请求队列
-
 export const request: RequestConfig = {
   timeout: 5000,
   baseURL: '/api',
@@ -68,32 +59,19 @@ export const request: RequestConfig = {
         return response?.data;
       },
       async (error: any) => {
-        const { data, config } = error.response;
-        if (refreshing) {
-          return new Promise((resolve) => {
-            queue.push({ config, resolve });
-          });
+        const { data } = error.response;
+        if (data.code === 401) {
+          message.error(data.data);
+          history.push('/login');
         }
-        if (data.code === 401 && !config.url.includes('/user/refresh')) {
-          refreshing = true;
-          const [_, res] = await to(refreshToken());
-          await localforage.setItem('access_token', res.accessToken);
-          await localforage.setItem('refresh_token', res.refreshToken);
-          refreshing = false;
-          if (res.status === 200) {
-            queue.forEach(({ config, resolve }) => {
-              resolve(maxRequest(config));
-            });
-            return maxRequest(config);
-          } else {
-            message.error(res.data);
-            history.push('/login');
-          }
-        }
-        return Promise.reject(error?.response?.data?.data);
+        return Promise.reject(data);
       },
     ],
   ],
+};
+
+export const styledComponents = {
+  GlobalStyle: createGlobalStyle``,
 };
 
 localforage.config({

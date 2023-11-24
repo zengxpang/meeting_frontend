@@ -1,4 +1,3 @@
-import { IRegisterUser, register, registerCaptcha } from '@/services';
 import {
   ProForm,
   ProFormText,
@@ -8,7 +7,22 @@ import { message } from 'antd';
 import to from 'await-to-js';
 import { isNull } from 'lodash-es';
 import { history } from '@umijs/max';
-import { Link } from '@umijs/max';
+import { Link, styled } from '@umijs/max';
+
+import { IRegisterUser, register, registerCaptcha } from '@/services';
+
+const Wrap = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Info = styled.div`
+  margin-bottom: 16px;
+  text-align: center;
+`;
 
 interface IRegisterProps {}
 
@@ -38,8 +52,7 @@ const Register = (props: IRegisterProps) => {
   };
 
   return (
-    <div className="flex flex-col h-full justify-center items-center">
-      <div className="font-600 font-size-33px mb-4">会议室预定系统</div>
+    <Wrap>
       <ProForm
         layout="vertical"
         onFinish={handleFinish}
@@ -149,11 +162,11 @@ const Register = (props: IRegisterProps) => {
           ]}
           onGetCaptcha={handleGetCaptcha}
         />
-        <div className="mb-4 text-right">
+        <Info>
           已有账号? 去<Link to="/login">登录</Link>
-        </div>
+        </Info>
       </ProForm>
-    </div>
+    </Wrap>
   );
 };
 

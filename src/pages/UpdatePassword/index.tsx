@@ -11,7 +11,15 @@ import {
 import to from 'await-to-js';
 import { isNull } from 'lodash-es';
 import { message } from 'antd';
-import { useNavigate } from '@umijs/max';
+import { useNavigate, styled } from '@umijs/max';
+
+const Wrap = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 
 interface IUpdatePasswordProps {}
 
@@ -43,8 +51,7 @@ const UpdatePassword = (props: IUpdatePasswordProps) => {
   };
 
   return (
-    <div className="flex flex-col h-full justify-center items-center">
-      <div className="font-600 font-size-33px mb-4">会议室预定系统</div>
+    <Wrap>
       <ProForm
         layout="vertical"
         onFinish={handleFinish}
@@ -142,7 +149,7 @@ const UpdatePassword = (props: IUpdatePasswordProps) => {
           ]}
         />
       </ProForm>
-    </div>
+    </Wrap>
   );
 };
 

@@ -1,9 +1,11 @@
 import React, { useRef } from 'react';
-import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
+import { ActionType, ProColumns } from '@ant-design/pro-components';
 import { request } from '@umijs/max';
 import to from 'await-to-js';
 import { Button, message, Popconfirm, Tag } from 'antd';
 import { isNull } from 'lodash-es';
+
+import { BaseProTable } from '@/components';
 
 interface IMeetingRoomList {}
 const MeetingRoomList = (props: IMeetingRoomList) => {
@@ -116,7 +118,7 @@ const MeetingRoomList = (props: IMeetingRoomList) => {
   ];
 
   return (
-    <ProTable<IKeyValue>
+    <BaseProTable<IKeyValue>
       rowKey={'id'}
       columns={columns}
       actionRef={actionRef}
@@ -134,7 +136,7 @@ const MeetingRoomList = (props: IMeetingRoomList) => {
           }),
         );
         return {
-          data: data?.meetingRooms,
+          data: data?.meetingRooms ?? [],
           success: true,
           total: data?.totalCount ?? 0,
         };

@@ -7,15 +7,24 @@ import {
 import { useRef } from 'react';
 import { useAsyncEffect } from 'ahooks';
 import to from 'await-to-js';
+import { Form, message } from 'antd';
+import { isNull } from 'lodash-es';
+import { UploadAvatar } from '@/components';
+import { styled } from '@umijs/max';
+
 import {
   getUserInfo,
   IUpdateUserInfo,
   updateUserInfo,
   updateUserInfoCaptcha,
 } from '@/services';
-import { Form, message } from 'antd';
-import { isNull } from 'lodash-es';
-import { UploadAvatar } from '@/components';
+
+const Wrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 
 interface IUpdateInfoProps {}
 
@@ -58,7 +67,7 @@ const UpdateInfo = (props: IUpdateInfoProps) => {
   };
 
   return (
-    <div className="flex flex-col  justify-center items-center">
+    <Wrap>
       <ProForm
         layout="vertical"
         onFinish={handleFinish}
@@ -139,7 +148,7 @@ const UpdateInfo = (props: IUpdateInfoProps) => {
           onGetCaptcha={handleGetCaptcha}
         />
       </ProForm>
-    </div>
+    </Wrap>
   );
 };
 
